@@ -42,8 +42,7 @@ import org.springframework.core.io.ProtocolResolver;
 public interface ConfigurableApplicationContext extends ApplicationContext, Lifecycle, Closeable {
 
 	/**
-	 * Any number of these characters are considered delimiters between
-	 * multiple context config paths in a single String value.
+	 * 任何数量的这些字符都被视为单个String值中*多个上下文配置路径之间的分隔符。
 	 * @see org.springframework.context.support.AbstractXmlApplicationContext#setConfigLocation
 	 * @see org.springframework.web.context.ContextLoader#CONFIG_LOCATION_PARAM
 	 * @see org.springframework.web.servlet.FrameworkServlet#setContextConfigLocation

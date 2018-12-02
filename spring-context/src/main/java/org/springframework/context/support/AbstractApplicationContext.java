@@ -163,38 +163,38 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/** Unique id for this context, if any */
 	private String id = ObjectUtils.identityToString(this);
 
-	/** Display name */
+	/** 显示名称 */
 	private String displayName = ObjectUtils.identityToString(this);
 
-	/** Parent context */
+	/** 父容器 */
 	private ApplicationContext parent;
 
-	/** Environment used by this context */
+	/** 容器的环境 */
 	private ConfigurableEnvironment environment;
 
-	/** BeanFactoryPostProcessors to apply on refresh */
+	/**方法中添加到内部容器使用的BeanFactoryPostProcessors */
 	private final List<BeanFactoryPostProcessor> beanFactoryPostProcessors =
 			new ArrayList<BeanFactoryPostProcessor>();
 
-	/** System time in milliseconds when this context started */
+	/** 此上下文启动时的系统时间（以毫秒为单位） */
 	private long startupDate;
 
-	/** Flag that indicates whether this context is currently active */
+	/** 指示此上下文当前是否处于活动状态的标志*/
 	private final AtomicBoolean active = new AtomicBoolean();
 
-	/** Flag that indicates whether this context has been closed already */
+	/** 指示此上下文是否已关闭的标志 */
 	private final AtomicBoolean closed = new AtomicBoolean();
 
-	/** Synchronization monitor for the "refresh" and "destroy" */
+	/** 同步监听器，用于监听 "refresh" and "destroy" 方法锁 */
 	private final Object startupShutdownMonitor = new Object();
 
-	/** Reference to the JVM shutdown hook, if registered */
+	/** 关闭外部容器的线程 */
 	private Thread shutdownHook;
 
-	/** ResourcePatternResolver used by this context */
+	/** ResourcePatternResolver资源通配符的实现*/
 	private ResourcePatternResolver resourcePatternResolver;
 
-	/** LifecycleProcessor for managing the lifecycle of beans within this context */
+	/** LifecycleProcessor，用于在此上下文中管理bean的生命周期 */
 	private LifecycleProcessor lifecycleProcessor;
 
 	/** MessageSource we delegate our implementation of this interface to */
@@ -206,19 +206,19 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/** Statically specified listeners */
 	private final Set<ApplicationListener<?>> applicationListeners = new LinkedHashSet<ApplicationListener<?>>();
 
-	/** ApplicationEvents published early */
+	/** 给ApplicationEventMulticaster接口实现实现广播通知监听类 */
 	private Set<ApplicationEvent> earlyApplicationEvents;
 
 
 	/**
-	 * Create a new AbstractApplicationContext with no parent.
+	 * 创建一个没有父容器的AbstractApplicationContext。
 	 */
 	public AbstractApplicationContext() {
 		this.resourcePatternResolver = getResourcePatternResolver();
 	}
 
 	/**
-	 * Create a new AbstractApplicationContext with the given parent context.
+	 * 使用给定的父容器创建新的AbstractApplicationContext。
 	 * @param parent the parent context
 	 */
 	public AbstractApplicationContext(ApplicationContext parent) {
@@ -228,15 +228,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 
 	//---------------------------------------------------------------------
-	// Implementation of ApplicationContext interface
+	// ApplicationContext接口的实现
 	//---------------------------------------------------------------------
 
-	/**
-	 * Set the unique id of this application context.
-	 * <p>Default is the object id of the context instance, or the name
-	 * of the context bean if the context is itself defined as a bean.
-	 * @param id the unique id of the context
-	 */
 	@Override
 	public void setId(String id) {
 		this.id = id;
@@ -252,40 +246,27 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		return "";
 	}
 
-	/**
-	 * Set a friendly name for this context.
-	 * Typically done during initialization of concrete context implementations.
-	 * <p>Default is the object id of the context instance.
-	 */
+
 	public void setDisplayName(String displayName) {
 		Assert.hasLength(displayName, "Display name must not be empty");
 		this.displayName = displayName;
 	}
 
-	/**
-	 * Return a friendly name for this context.
-	 * @return a display name for this context (never {@code null})
-	 */
 	@Override
 	public String getDisplayName() {
 		return this.displayName;
 	}
 
-	/**
-	 * Return the parent context, or {@code null} if there is no parent
-	 * (that is, this context is the root of the context hierarchy).
-	 */
+
 	@Override
 	public ApplicationContext getParent() {
 		return this.parent;
 	}
 
 	/**
-	 * Set the {@code Environment} for this application context.
-	 * <p>Default value is determined by {@link #createEnvironment()}. Replacing the
-	 * default with this method is one option but configuration through {@link
-	 * #getEnvironment()} should also be considered. In either case, such modifications
-	 * should be performed <em>before</em> {@link #refresh()}.
+	 * 1 为此应用程序上下文设置{@code Environment}。 ,
+	 * 2 默认值由{@link #createEnvironment（）}确定。,
+	 * 3 在任何一种情况下，这些修改*都应该在<em> {@link #refresh（）}之前执行<em>。
 	 * @see org.springframework.context.support.AbstractApplicationContext#createEnvironment
 	 */
 	@Override
@@ -294,10 +275,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	/**
-	 * Return the {@code Environment} for this application context in configurable
-	 * form, allowing for further customization.
-	 * <p>If none specified, a default environment will be initialized via
-	 * {@link #createEnvironment()}.
+	 * 1 返回此应用程序上下文的{@code Environment}。
+	 *   1-1 如果未指定，则通过{@link #createEnvironment()}.创建
 	 */
 	@Override
 	public ConfigurableEnvironment getEnvironment() {
@@ -308,17 +287,15 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	/**
-	 * Create and return a new {@link StandardEnvironment}.
-	 * <p>Subclasses may override this method in order to supply
-	 * a custom {@link ConfigurableEnvironment} implementation.
+	 * 1 创建并返回一个新的{@link StandardEnvironment}。 ,
+	 * 2 子类可以覆盖此方法，以便提供*自定义{@link ConfigurableEnvironment}实现。
 	 */
 	protected ConfigurableEnvironment createEnvironment() {
 		return new StandardEnvironment();
 	}
 
 	/**
-	 * Return this context's internal bean factory as AutowireCapableBeanFactory,
-	 * if already available.
+	 * 将此上下文的内部bean工厂返回为AutowireCapableBeanFactory，*如果已经可用。
 	 * @see #getBeanFactory()
 	 */
 	@Override
@@ -327,20 +304,21 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	/**
-	 * Return the timestamp (ms) when this context was first loaded.
+	 * 首次加载此上下文时，返回时间戳（ms）。
 	 */
 	@Override
 	public long getStartupDate() {
 		return this.startupDate;
 	}
 
+
+	//---------------------------------------------------------------------
+	// ApplicationContext接口事件模块接口实现
+	//---------------------------------------------------------------------
+
 	/**
-	 * Publish the given event to all listeners.
-	 * <p>Note: Listeners get initialized after the MessageSource, to be able
-	 * to access it within listener implementations. Thus, MessageSource
-	 * implementations cannot publish events.
-	 * @param event the event to publish (may be application-specific or a
-	 * standard framework event)
+	 * 将给定ApplicationEvent事件发布给所有侦听器listeners。
+	 * 监听器在MessageSource之后初始化，以便能够在监听器实现中访问它。, 因此，MessageSource *实现无法发布事件？
 	 */
 	@Override
 	public void publishEvent(ApplicationEvent event) {
@@ -348,12 +326,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	/**
-	 * Publish the given event to all listeners.
-	 * <p>Note: Listeners get initialized after the MessageSource, to be able
-	 * to access it within listener implementations. Thus, MessageSource
-	 * implementations cannot publish events.
-	 * @param event the event to publish (may be an {@link ApplicationEvent}
-	 * or a payload object to be turned into a {@link PayloadApplicationEvent})
+	 * 将给定事件(类型为Object,spring4.2之后针对任何对象都能作为一种事件去发布)发布给所有侦听器listeners。
+	 * 监听器在MessageSource之后初始化，以便能够在监听器实现中访问它。, 因此，MessageSource *实现无法发布事件?
 	 */
 	@Override
 	public void publishEvent(Object event) {
@@ -373,7 +347,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			logger.trace("Publishing event in " + getDisplayName() + ": " + event);
 		}
 
-		// Decorate event as an ApplicationEvent if necessary
+		// 判断事件的类型当事件类型非ApplicationEvent转化为PayloadApplicationEvent类型的事件
 		ApplicationEvent applicationEvent;
 		if (event instanceof ApplicationEvent) {
 			applicationEvent = (ApplicationEvent) event;
@@ -385,7 +359,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			}
 		}
 
-		// Multicast right now if possible - or lazily once the multicaster is initialized
+		// 将事件添加到earlyApplicationEvents
 		if (this.earlyApplicationEvents != null) {
 			this.earlyApplicationEvents.add(applicationEvent);
 		}
@@ -405,8 +379,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	/**
-	 * Return the internal ApplicationEventMulticaster used by the context.
-	 * @return the internal ApplicationEventMulticaster (never {@code null})
+	 * 返回上下文使用的内部ApplicationEventMulticaster。
+	 * @return 内部的ApplicationEventMulticaster (never {@code null})
 	 * @throws IllegalStateException if the context has not been initialized yet
 	 */
 	ApplicationEventMulticaster getApplicationEventMulticaster() throws IllegalStateException {
@@ -801,8 +775,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	/**
-	 * Add beans that implement ApplicationListener as listeners.
-	 * Doesn't affect other listeners, which can be added without being beans.
+	 * 添加实现ApplicationListener作为侦听器的bean ,
+	 * 不影响其他侦听器，可以添加而不是bean。
 	 */
 	protected void registerListeners() {
 		// Register statically specified listeners first.
@@ -1044,6 +1018,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// For subclasses: do nothing by default.
 	}
 
+	/**
+	 * @return 指示此context当前是否处于活动状态的标志
+	 */
 	@Override
 	public boolean isActive() {
 		return this.active.get();
@@ -1234,8 +1211,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	}
 
 	/**
-	 * Return the internal bean factory of the parent context if it implements
-	 * ConfigurableApplicationContext; else, return the parent context itself.
+	 * 如果外部容器context父容器实现了ConfigurableApplicationContext，则返回父上下文的内部容器bean工厂, 否则，返回父上下文本身。
 	 * @see org.springframework.context.ConfigurableApplicationContext#getBeanFactory
 	 */
 	protected BeanFactory getInternalParentBeanFactory() {

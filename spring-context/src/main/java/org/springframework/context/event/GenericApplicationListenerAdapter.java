@@ -24,8 +24,7 @@ import org.springframework.core.ResolvableType;
 import org.springframework.util.Assert;
 
 /**
- * {@link GenericApplicationListener} adapter that determines supported event types
- * through introspecting the generically declared type of the target listener.
+ * {@link GenericApplicationListener} 为监听器对象代理来增强其和时间匹配过滤的能力。
  *
  * @author Juergen Hoeller
  * @author Stephane Nicoll
@@ -40,7 +39,7 @@ public class GenericApplicationListenerAdapter implements GenericApplicationList
 
 
 	/**
-	 * Create a new GenericApplicationListener for the given delegate.
+	 * 为监听器对象创建一个新的GenericApplicationListener代理来增强其和时间匹配过滤的能力。
 	 * @param delegate the delegate listener to be invoked
 	 */
 	@SuppressWarnings("unchecked")
@@ -51,11 +50,17 @@ public class GenericApplicationListenerAdapter implements GenericApplicationList
 	}
 
 
+	/**
+	 * 触发时间通知
+	 */
 	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
 		this.delegate.onApplicationEvent(event);
 	}
 
+	/**
+	 * 确定此侦听器是否实际支持给定的事件类型。
+	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public boolean supportsEventType(ResolvableType eventType) {
@@ -68,11 +73,17 @@ public class GenericApplicationListenerAdapter implements GenericApplicationList
 		}
 	}
 
+	/**
+	 * 确定此侦听器是否实际支持给定的事件类型。
+	 */
 	@Override
 	public boolean supportsEventType(Class<? extends ApplicationEvent> eventType) {
 		return supportsEventType(ResolvableType.forClass(eventType));
 	}
 
+	/**
+	 * 确定此侦听器是否实际支持给定的源类型。
+	 */
 	@Override
 	public boolean supportsSourceType(Class<?> sourceType) {
 		return !(this.delegate instanceof SmartApplicationListener) ||

@@ -35,13 +35,13 @@ import org.springframework.core.Ordered;
 public interface SmartApplicationListener extends ApplicationListener<ApplicationEvent>, Ordered {
 
 	/**
-	 * Determine whether this listener actually supports the given event type.
+	 * 确定此侦听器是否实际支持给定的事件类型。
 	 * @param eventType the event type (never {@code null})
 	 */
 	boolean supportsEventType(Class<? extends ApplicationEvent> eventType);
 
 	/**
-	 * Determine whether this listener actually supports the given source type.
+	 * 确定此侦听器是否实际支持给定的源类型。
 	 * @param sourceType the source type, or {@code null} if no source
 	 */
 	boolean supportsSourceType(Class<?> sourceType);

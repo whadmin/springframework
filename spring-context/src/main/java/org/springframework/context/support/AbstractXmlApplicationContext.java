@@ -44,17 +44,20 @@ import org.springframework.core.io.Resource;
  */
 public abstract class AbstractXmlApplicationContext extends AbstractRefreshableConfigApplicationContext {
 
+	/**
+	 * 是否使用XML验证
+	 */
 	private boolean validating = true;
 
 
 	/**
-	 * Create a new AbstractXmlApplicationContext with no parent.
+	 * 创建一个没有父项的新AbstractXmlApplicationContext。
 	 */
 	public AbstractXmlApplicationContext() {
 	}
 
 	/**
-	 * Create a new AbstractXmlApplicationContext with the given parent context.
+	 * 使用给定的父上下文创建新的AbstractXmlApplicationContext。
 	 * @param parent the parent context
 	 */
 	public AbstractXmlApplicationContext(ApplicationContext parent) {
@@ -63,7 +66,7 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 
 
 	/**
-	 * Set whether to use XML validation. Default is {@code true}.
+	 * 设置是否使用XML验证。, 默认值为{@code true}。
 	 */
 	public void setValidating(boolean validating) {
 		this.validating = validating;
@@ -71,18 +74,18 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 
 
 	/**
-	 * Loads the bean definitions via an XmlBeanDefinitionReader.
+	 * 加载BeanDefinitions 到内部容器工厂DefaultListableBeanFactory
 	 * @see org.springframework.beans.factory.xml.XmlBeanDefinitionReader
 	 * @see #initBeanDefinitionReader
 	 * @see #loadBeanDefinitions
 	 */
 	@Override
 	protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws BeansException, IOException {
-		// Create a new XmlBeanDefinitionReader for the given BeanFactory.
+		// 为给定的BeanFactory创建一个新的XmlBeanDefinitionReader(用来读取xml文件配置的ben,解析为BeanDefinition)
 		XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
 
-		// Configure the bean definition reader with this context's
-		// resource loading environment.
+		// 使用此上下文的
+		// 资源加载环境配置bean定义读取器。
 		beanDefinitionReader.setEnvironment(this.getEnvironment());
 		beanDefinitionReader.setResourceLoader(this);
 		beanDefinitionReader.setEntityResolver(new ResourceEntityResolver(this));
@@ -94,11 +97,8 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 	}
 
 	/**
-	 * Initialize the bean definition reader used for loading the bean
-	 * definitions of this context. Default implementation is empty.
-	 * <p>Can be overridden in subclasses, e.g. for turning off XML validation
-	 * or using a different XmlBeanDefinitionParser implementation.
-	 * @param reader the bean definition reader used by this context
+	 * 初始化bean的读取器XmlBeanDefinitionReader，设置是否使用XML验证。, 默认值为{@code true}。
+	 * @param reader 此context使用的bean定义读取器
 	 * @see org.springframework.beans.factory.xml.XmlBeanDefinitionReader#setDocumentReaderClass
 	 */
 	protected void initBeanDefinitionReader(XmlBeanDefinitionReader reader) {
@@ -106,9 +106,8 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 	}
 
 	/**
-	 * Load the bean definitions with the given XmlBeanDefinitionReader.
-	 * <p>The lifecycle of the bean factory is handled by the {@link #refreshBeanFactory}
-	 * method; hence this method is just supposed to load and/or register bean definitions.
+	 * 使用bean的读取器XmlBeanDefinitionReader读取{@link #getConfigResources}，{@link #getConfigLocations}配置资源，
+	 * 解析为BeanDefinition 添加到内部容器工厂DefaultListableBeanFactory
 	 * @param reader the XmlBeanDefinitionReader to use
 	 * @throws BeansException in case of bean registration errors
 	 * @throws IOException if the required XML document isn't found

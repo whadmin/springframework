@@ -137,9 +137,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
 
 	/**
-	 * Set whether to use XML validation. Default is {@code true}.
-	 * <p>This method switches namespace awareness on if validation is turned off,
-	 * in order to still process schema namespaces properly in such a scenario.
+	 * 设置是否使用XML验证。, 默认值为{@code true}。
+	 * <p>如果关闭验证，此方法会切换名称空间感知，*以便在这种情况下仍然正确处理模式名称空间。
 	 * @see #setValidationMode
 	 * @see #setNamespaceAware
 	 */

@@ -122,7 +122,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	/** Resolver strategy for method parameter names */
 	private ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
 
-	/** Whether to automatically try to resolve circular references between beans */
+	/** 是否允许循环引用 */
 	private boolean allowCircularReferences = true;
 
 	/**
@@ -206,17 +206,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 	}
 
 	/**
-	 * Set whether to allow circular references between beans - and automatically
-	 * try to resolve them.
-	 * <p>Note that circular reference resolution means that one of the involved beans
-	 * will receive a reference to another bean that is not fully initialized yet.
-	 * This can lead to subtle and not-so-subtle side effects on initialization;
-	 * it does work fine for many scenarios, though.
-	 * <p>Default is "true". Turn this off to throw an exception when encountering
-	 * a circular reference, disallowing them completely.
-	 * <p><b>NOTE:</b> It is generally recommended to not rely on circular references
-	 * between your beans. Refactor your application logic to have the two beans
-	 * involved delegate to a third bean that encapsulates their common logic.
+	 * 设置是否允许bean之间的循环引用 - 并自动*尝试解决它们。
+	 * 请注意，循环引用解析意味着其中一个涉及的bean
+	 * 将接收对尚未完全初始化的另一个bean的引用。 ,
+	 * 这可能会导致初始化时出现细微且不那么微妙的副作用; ,
+	  *但它确实适用于许多场景。
+	 * <p>默认为“true”。, 将其关闭以在遇到*循环引用时抛出异常，完全禁止它们。
 	 */
 	public void setAllowCircularReferences(boolean allowCircularReferences) {
 		this.allowCircularReferences = allowCircularReferences;
