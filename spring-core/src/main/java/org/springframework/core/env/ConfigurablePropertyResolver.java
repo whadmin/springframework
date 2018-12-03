@@ -30,26 +30,14 @@ import org.springframework.core.convert.support.ConfigurableConversionService;
 public interface ConfigurablePropertyResolver extends PropertyResolver {
 
 	/**
-	 * Return the {@link ConfigurableConversionService} used when performing type
-	 * conversions on properties.
-	 * <p>The configurable nature of the returned conversion service allows for
-	 * the convenient addition and removal of individual {@code Converter} instances:
-	 * <pre class="code">
-	 * ConfigurableConversionService cs = env.getConversionService();
-	 * cs.addConverter(new FooConverter());
-	 * </pre>
+	 * 返回在解析属性值为指定类型的 类型转化器{@link ConfigurableConversionService}。 ,
 	 * @see PropertyResolver#getProperty(String, Class)
 	 * @see org.springframework.core.convert.converter.ConverterRegistry#addConverter
 	 */
 	ConfigurableConversionService getConversionService();
 
 	/**
-	 * Set the {@link ConfigurableConversionService} to be used when performing type
-	 * conversions on properties.
-	 * <p><strong>Note:</strong> as an alternative to fully replacing the
-	 * {@code ConversionService}, consider adding or removing individual
-	 * {@code Converter} instances by drilling into {@link #getConversionService()}
-	 * and calling methods such as {@code #addConverter}.
+	 * 设置在解析属性值为指定类型的 类型转化器{@link ConfigurableConversionService}。 ,
 	 * @see PropertyResolver#getProperty(String, Class)
 	 * @see #getConversionService()
 	 * @see org.springframework.core.convert.converter.ConverterRegistry#addConverter
@@ -57,45 +45,40 @@ public interface ConfigurablePropertyResolver extends PropertyResolver {
 	void setConversionService(ConfigurableConversionService conversionService);
 
 	/**
-	 * Set the prefix that placeholders replaced by this resolver must begin with.
+	 * 设置此解析程序替换的占位符必须以此开头的前缀。
 	 */
 	void setPlaceholderPrefix(String placeholderPrefix);
 
 	/**
-	 * Set the suffix that placeholders replaced by this resolver must end with.
+	 * 设置由此解析程序替换的占位符必须以此结尾的后缀。
 	 */
 	void setPlaceholderSuffix(String placeholderSuffix);
 
 	/**
-	 * Specify the separating character between the placeholders replaced by this
-	 * resolver and their associated default value, or {@code null} if no such
-	 * special character should be processed as a value separator.
+	 * 指定由此
+	 * 解析程序替换的占位符之间的分隔字符及其关联的默认值，如果不应将此
+	 * 特殊字符作为值分隔符处理，则指定{@code null}。
 	 */
 	void setValueSeparator(String valueSeparator);
 
 	/**
-	 * Set whether to throw an exception when encountering an unresolvable placeholder
-	 * nested within the value of a given property. A {@code false} value indicates strict
-	 * resolution, i.e. that an exception will be thrown. A {@code true} value indicates
-	 * that unresolvable nested placeholders should be passed through in their unresolved
-	 * ${...} form.
-	 * <p>Implementations of {@link #getProperty(String)} and its variants must inspect
-	 * the value set here to determine correct behavior when property values contain
-	 * unresolvable placeholders.
-	 * @since 3.2
+	 * 设置当遇到嵌套在给定属性值内的不可解析的占位符*时是否抛出异常。 ,
+	 * {@code false}值表示出现无法解析占位符即将抛出异常。 ,
+	 * {@code true}值表示出现无法解析占位符以未解析的*$ {...}形式传递。 ,
+	 * key1:Hello {key2}
+	 * key2:world
+	 * getProperty(String key1)== Hello world
 	 */
 	void setIgnoreUnresolvableNestedPlaceholders(boolean ignoreUnresolvableNestedPlaceholders);
 
 	/**
-	 * Specify which properties must be present, to be verified by
+	 * 指定必须存在哪些属性，以进行验证
 	 * {@link #validateRequiredProperties()}.
 	 */
 	void setRequiredProperties(String... requiredProperties);
 
 	/**
-	 * Validate that each of the properties specified by
-	 * {@link #setRequiredProperties} is present and resolves to a
-	 * non-{@code null} value.
+	 * 验证* {@link #setRequiredProperties}指定的每个属性是否存在并解析为*非{@ code null}值。
 	 * @throws MissingRequiredPropertiesException if any of the required
 	 * properties are not resolvable.
 	 */

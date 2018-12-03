@@ -28,17 +28,11 @@ import org.springframework.core.ResolvableType;
 import org.springframework.util.ErrorHandler;
 
 /**
- * Simple implementation of the {@link ApplicationEventMulticaster} interface.
+ * 简单实现{@link ApplicationEventMulticaster}接口。
  *
- * <p>Multicasts all events to all registered listeners, leaving it up to
- * the listeners to ignore events that they are not interested in.
- * Listeners will usually perform corresponding {@code instanceof}
- * checks on the passed-in event object.
+ * <p>将所有事件多播到所有已注册的侦听器，将其留给侦听器以忽略他们不感??兴趣的事件。*侦听器通常会对传入的事件对象执行相应的{@code instanceof} *检查。
  *
- * <p>By default, all listeners are invoked in the calling thread.
- * This allows the danger of a rogue listener blocking the entire application,
- * but adds minimal overhead. Specify an alternative task executor to have
- * listeners executed in different threads, for example from a thread pool.
+ * <p>默认情况下，在调用线程中调用所有侦听器。 , *这允许恶意侦听器阻止整个应用程序的危险，*但增加了最小的开销。, 指定备用任务执行程序以使*侦听器在不同的线程中执行，例如从线程池中执行。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -67,14 +61,10 @@ public class SimpleApplicationEventMulticaster extends AbstractApplicationEventM
 
 
 	/**
-	 * Set a custom executor (typically a {@link org.springframework.core.task.TaskExecutor})
-	 * to invoke each listener with.
-	 * <p>Default is equivalent to {@link org.springframework.core.task.SyncTaskExecutor},
-	 * executing all listeners synchronously in the calling thread.
-	 * <p>Consider specifying an asynchronous task executor here to not block the
-	 * caller until all listeners have been executed. However, note that asynchronous
-	 * execution will not participate in the caller's thread context (class loader,
-	 * transaction association) unless the TaskExecutor explicitly supports this.
+	 * 设置自定义执行程序（通常是{@link org.springframework.core.task.TaskExecutor}）*以异步通知调用每个侦听器。
+	 * <p>默认等效于{@link org.springframework.core.task.SyncTaskExecutor}，
+	 * 在调用线程中同步执行所有侦听器。 ,
+	 * <p>考虑在此指定一个异步任务执行器，以便在所有侦听器都被执行之前不阻塞*调用者。, 但是，请注意异步*执行不会参与调用者的线程上下文（类加载器，*事务关联），除非TaskExecutor明确支持此操作。
 	 * @see org.springframework.core.task.SyncTaskExecutor
 	 * @see org.springframework.core.task.SimpleAsyncTaskExecutor
 	 */
@@ -83,25 +73,14 @@ public class SimpleApplicationEventMulticaster extends AbstractApplicationEventM
 	}
 
 	/**
-	 * Return the current task executor for this multicaster.
+	 * 返回当前任务执行程序。
 	 */
 	protected Executor getTaskExecutor() {
 		return this.taskExecutor;
 	}
 
 	/**
-	 * Set the {@link ErrorHandler} to invoke in case an exception is thrown
-	 * from a listener.
-	 * <p>Default is none, with a listener exception stopping the current
-	 * multicast and getting propagated to the publisher of the current event.
-	 * If a {@linkplain #setTaskExecutor task executor} is specified, each
-	 * individual listener exception will get propagated to the executor but
-	 * won't necessarily stop execution of other listeners.
-	 * <p>Consider setting an {@link ErrorHandler} implementation that catches
-	 * and logs exceptions (a la
-	 * {@link org.springframework.scheduling.support.TaskUtils#LOG_AND_SUPPRESS_ERROR_HANDLER})
-	 * or an implementation that logs exceptions while nevertheless propagating them
-	 * (e.g. {@link org.springframework.scheduling.support.TaskUtils#LOG_AND_PROPAGATE_ERROR_HANDLER}).
+	 * 如果从侦听器抛出异常*，请设置{@link ErrorHandler}以进行调用。
 	 * @since 4.1
 	 */
 	public void setErrorHandler(ErrorHandler errorHandler) {
@@ -109,7 +88,7 @@ public class SimpleApplicationEventMulticaster extends AbstractApplicationEventM
 	}
 
 	/**
-	 * Return the current error handler for this multicaster.
+	 * 返回此多播器的当前错误处理程序。{@link ErrorHandler}
 	 * @since 4.1
 	 */
 	protected ErrorHandler getErrorHandler() {
@@ -117,11 +96,18 @@ public class SimpleApplicationEventMulticaster extends AbstractApplicationEventM
 	}
 
 
+	/**
+	 * 发布事件
+	 */
 	@Override
 	public void multicastEvent(ApplicationEvent event) {
 		multicastEvent(event, resolveDefaultEventType(event));
 	}
 
+
+	/**
+	 * 发布事件
+	 */
 	@Override
 	public void multicastEvent(final ApplicationEvent event, ResolvableType eventType) {
 		ResolvableType type = (eventType != null ? eventType : resolveDefaultEventType(event));
@@ -141,12 +127,15 @@ public class SimpleApplicationEventMulticaster extends AbstractApplicationEventM
 		}
 	}
 
+	/**
+	 *  获取事件的类型
+	 * */
 	private ResolvableType resolveDefaultEventType(ApplicationEvent event) {
 		return ResolvableType.forInstance(event);
 	}
 
 	/**
-	 * Invoke the given listener with the given event.
+	 * 使用给定的事件调用给定的侦听器。
 	 * @param listener the ApplicationListener to invoke
 	 * @param event the current event to propagate
 	 * @since 4.1
@@ -166,7 +155,6 @@ public class SimpleApplicationEventMulticaster extends AbstractApplicationEventM
 		}
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	private void doInvokeListener(ApplicationListener listener, ApplicationEvent event) {
 		try {
 			listener.onApplicationEvent(event);

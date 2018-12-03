@@ -26,10 +26,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Utility class for working with Strings that have placeholder values in them. A placeholder takes the form
- * {@code ${name}}. Using {@code PropertyPlaceholderHelper} these placeholders can be substituted for
- * user-supplied values. <p> Values for substitution can be supplied using a {@link Properties} instance or
- * using a {@link PlaceholderResolver}.
+ * 用于处理包含占位符值的字符串的实用程序类。,
+ * 占位符采用* {@code $ {name}}形式。,
+ * 使用{@code PropertyPlaceholderHelper}这些占位符可以替换*用户提供的值。 ,
+ * <p>可以使用{@link Properties}实例或*使用{@link PlaceholderResolver}提供替换值。
  *
  * @author Juergen Hoeller
  * @author Rob Harrop

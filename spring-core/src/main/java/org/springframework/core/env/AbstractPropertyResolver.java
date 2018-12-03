@@ -41,12 +41,24 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
+	/**
+	 * 解析类型转化处理类
+	 */
 	private volatile ConfigurableConversionService conversionService;
 
+	/**
+	 * 字符串占位符处理类
+	 */
 	private PropertyPlaceholderHelper nonStrictHelper;
 
+	/**
+	 * 字符串占位符处理类
+	 */
 	private PropertyPlaceholderHelper strictHelper;
 
+	/**
+	 * 确定是否有任何无法解决的占位符应该引发异常或被忽略。
+	 */
 	private boolean ignoreUnresolvableNestedPlaceholders = false;
 
 	private String placeholderPrefix = SystemPropertyUtils.PLACEHOLDER_PREFIX;
@@ -79,8 +91,7 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 	}
 
 	/**
-	 * Set the prefix that placeholders replaced by this resolver must begin with.
-	 * <p>The default is "${".
+	 * 设置此解析程序替换的占位符必须以此开头的前缀。默认值为“$ {”。
 	 * @see org.springframework.util.SystemPropertyUtils#PLACEHOLDER_PREFIX
 	 */
 	@Override
@@ -90,8 +101,7 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 	}
 
 	/**
-	 * Set the suffix that placeholders replaced by this resolver must end with.
-	 * <p>The default is "}".
+	 * 设置由此解析程序替换的占位符必须以此结尾的后缀。 , * <p>默认为“}”
 	 * @see org.springframework.util.SystemPropertyUtils#PLACEHOLDER_SUFFIX
 	 */
 	@Override
@@ -101,10 +111,7 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 	}
 
 	/**
-	 * Specify the separating character between the placeholders replaced by this
-	 * resolver and their associated default value, or {@code null} if no such
-	 * special character should be processed as a value separator.
-	 * <p>The default is ":".
+	 * 指定由此解析程序替换的占位符之间的分隔字符及其关联的默认值，如果不应将此特殊字符作为值分隔符处理，则指定{@code null}。 , * <p>默认为“：”
 	 * @see org.springframework.util.SystemPropertyUtils#VALUE_SEPARATOR
 	 */
 	@Override
@@ -113,13 +120,9 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 	}
 
 	/**
-	 * Set whether to throw an exception when encountering an unresolvable placeholder
-	 * nested within the value of a given property. A {@code false} value indicates strict
-	 * resolution, i.e. that an exception will be thrown. A {@code true} value indicates
-	 * that unresolvable nested placeholders should be passed through in their unresolved
-	 * ${...} form.
-	 * <p>The default is {@code false}.
-	 * @since 3.2
+	 * 设置当遇到嵌套在给定属性值内的不可解析的占位符*时是否抛出异常
+	 * {@code false}值表示出现无法解析占位符即将抛出异常。 ,
+	 * {@code true}值表示出现无法解析占位符以未解析的*$ {...}形式传递。 ,
 	 */
 	@Override
 	public void setIgnoreUnresolvableNestedPlaceholders(boolean ignoreUnresolvableNestedPlaceholders) {
@@ -211,14 +214,11 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 	}
 
 	/**
-	 * Resolve placeholders within the given string, deferring to the value of
-	 * {@link #setIgnoreUnresolvableNestedPlaceholders} to determine whether any
-	 * unresolvable placeholders should raise an exception or be ignored.
-	 * <p>Invoked from {@link #getProperty} and its variants, implicitly resolving
-	 * nested placeholders. In contrast, {@link #resolvePlaceholders} and
-	 * {@link #resolveRequiredPlaceholders} do <emphasis>not</emphasis> delegate
-	 * to this method but rather perform their own handling of unresolvable
-	 * placeholders, as specified by each of those methods.
+	 *解析给定字符串中的占位符，推迟到* {@link #setIgnoreUnresolvableNestedPlaceholders}的值，以确定是否有任何*不可解析的占位符引发异常或被忽略。 ,
+	 * <p>从{@link #getProperty}及其变体调用，隐式解析*嵌套占位符。,
+	 * 相反，{@link #resolvePlaceholders}和
+	 * {@link #resolveRequiredPlaceholders}对此方法执行<emphasis>而不是</ emphasis>委托
+	 *，而是执行自己对不可解析的*占位符的处理，这是由每个方法指定的。
 	 * @since 3.2
 	 * @see #setIgnoreUnresolvableNestedPlaceholders
 	 */
@@ -242,7 +242,7 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 	}
 
 	/**
-	 * Convert the given value to the specified target type, if necessary.
+	 * 如有必要，将给定值转换为指定的目标类型。
 	 * @param value the original property value
 	 * @param targetType the specified target type for property retrieval
 	 * @return the converted value, or the original value if no conversion
@@ -268,8 +268,7 @@ public abstract class AbstractPropertyResolver implements ConfigurablePropertyRe
 
 
 	/**
-	 * Retrieve the specified property as a raw String,
-	 * i.e. without resolution of nested placeholders.
+	 * 将指定的属性检索为原始String *，即不解析嵌套占位符。
 	 * @param key the property name to resolve
 	 * @return the property value or {@code null} if none found
 	 */
