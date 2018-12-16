@@ -22,12 +22,8 @@ import java.net.URI;
 import java.net.URL;
 
 /**
- * Interface for a resource descriptor that abstracts from the actual
- * type of underlying resource, such as a file or class path resource.
+ * 用于从实际类型的底层资源（例如文件或类路径资源）中抽象的资源描述符的接口
  *
- * <p>An InputStream can be opened for every resource if it exists in
- * physical form, but a URL or File handle can just be returned for
- * certain resources. The actual behavior is implementation-specific.
  *
  * @author Juergen Hoeller
  * @since 28.12.2003
@@ -47,92 +43,57 @@ import java.net.URL;
 public interface Resource extends InputStreamSource {
 
 	/**
-	 * Determine whether this resource actually exists in physical form.
-	 * <p>This method performs a definitive existence check, whereas the
-	 * existence of a {@code Resource} handle only guarantees a valid
-	 * descriptor handle.
+	 * 返回当前Resource代表的底层资源是否存在，true表示存在
 	 */
 	boolean exists();
 
 	/**
-	 * Indicate whether the contents of this resource can be read via
-	 * {@link #getInputStream()}.
-	 * <p>Will be {@code true} for typical resource descriptors;
-	 * note that actual content reading may still fail when attempted.
-	 * However, a value of {@code false} is a definitive indication
-	 * that the resource content cannot be read.
-	 * @see #getInputStream()
+	 * 返回当前Resource代表的底层资源是否可读，true表示可读。
 	 */
 	boolean isReadable();
 
 	/**
-	 * Indicate whether this resource represents a handle with an open stream.
-	 * If {@code true}, the InputStream cannot be read multiple times,
-	 * and must be read and closed to avoid resource leaks.
-	 * <p>Will be {@code false} for typical resource descriptors.
+	 * 返回当前Resource代表的底层资源是否已经打开，如果返回true，则只能被读取一次然后关闭以避免资源泄露；常见的Resource实现一般返回false。
 	 */
 	boolean isOpen();
 
 	/**
-	 * Return a URL handle for this resource.
-	 * @throws IOException if the resource cannot be resolved as URL,
-	 * i.e. if the resource is not available as descriptor
+	 * 如果当前Resource代表的底层资源能由java.util.URL代表，则返回该URL
 	 */
 	URL getURL() throws IOException;
 
 	/**
-	 * Return a URI handle for this resource.
-	 * @throws IOException if the resource cannot be resolved as URI,
-	 * i.e. if the resource is not available as descriptor
-	 * @since 2.5
+	 * 如果当前Resource代表的底层资源能由java.util.URI代表，则返回该URI
 	 */
 	URI getURI() throws IOException;
 
 	/**
-	 * Return a File handle for this resource.
-	 * @throws java.io.FileNotFoundException if the resource cannot be resolved as
-	 * absolute file path, i.e. if the resource is not available in a file system
-	 * @throws IOException in case of general resolution/reading failures
-	 * @see #getInputStream()
+	 * 如果当前Resource代表的底层资源能由java.io.File代表，则返回该File
 	 */
 	File getFile() throws IOException;
 
 	/**
-	 * Determine the content length for this resource.
-	 * @throws IOException if the resource cannot be resolved
-	 * (in the file system or as some other known physical resource type)
+	 * 确定此资源的内容长度。
 	 */
 	long contentLength() throws IOException;
 
 	/**
-	 * Determine the last-modified timestamp for this resource.
-	 * @throws IOException if the resource cannot be resolved
-	 * (in the file system or as some other known physical resource type)
+	 * 返回当前Resource代表的底层资源的最后修改时间。
 	 */
 	long lastModified() throws IOException;
 
 	/**
-	 * Create a resource relative to this resource.
-	 * @param relativePath the relative path (relative to this resource)
-	 * @return the resource handle for the relative resource
-	 * @throws IOException if the relative resource cannot be determined
+	 * 用于创建相对于当前Resource代表的底层资源的资源，比如当前Resource代表文件资源“d:/test/”则createRelative（“test.txt”）将返回表文件资源“d:/test/test.txt”Resource资源。
 	 */
 	Resource createRelative(String relativePath) throws IOException;
 
 	/**
-	 * Determine a filename for this resource, i.e. typically the last
-	 * part of the path: for example, "myfile.txt".
-	 * <p>Returns {@code null} if this type of resource does not
-	 * have a filename.
+	 * 返回当前Resource代表的底层文件资源的文件路径，比如File资源“file://d:/test.txt”将返回“d:/test.txt”，而URL资源http://www.javass.cn将返回“”，因为只返回文件路径。
 	 */
 	String getFilename();
 
 	/**
-	 * Return a description for this resource,
-	 * to be used for error output when working with the resource.
-	 * <p>Implementations are also encouraged to return this value
-	 * from their {@code toString} method.
-	 * @see Object#toString()
+	 * 返回此资源的描述，用于处理资源时的错误输出
 	 */
 	String getDescription();
 
